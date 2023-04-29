@@ -27,3 +27,6 @@ transformers==4.28.0
 accelerate==0.18.0
 uvicorn==0.22.0
 fastapi==0.95.1
+pyngrok
+nest_asyncio
+uvicorn

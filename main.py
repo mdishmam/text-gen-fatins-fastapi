@@ -1,13 +1,23 @@
 from typing import Union
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from modules import shared
 from modules.text_generation import encode, generate_reply
 
 from util import build_parameters, try_start_cloudflared
 
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 
 @app.post("/api/vi/generate/")
@@ -36,3 +46,15 @@ async def read_root(request: Request):
 
     # Process the parameters as needed
     return {"result": response}
+
+
+
+if __name__ == '__main__':
+    import nest_asyncio
+    from pyngrok import ngrok
+    import uvicorn
+
+    ngrok_tunnel = ngrok.connect(8000)
+    print('Public URL:', ngrok_tunnel.public_url)
+    nest_asyncio.apply()
+    uvicorn.run(app, port=8000)
