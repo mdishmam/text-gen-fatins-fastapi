@@ -21,18 +21,18 @@ async def read_root(request: Request):
     generator = generate_reply(
                 prompt, generate_params, stopping_strings=stopping_strings)
 
-            answer = ''
-            for a in generator:
-                if isinstance(a, str):
-                    answer = a
-                else:
-                    answer = a[0]
+    answer = ''
+    for a in generator:
+        if isinstance(a, str):
+            answer = a
+        else:
+            answer = a[0]
 
-            response = json.dumps({
-                'results': [{
-                    'text': answer if shared.is_chat() else answer[len(prompt):]
-                }]
-            })
+    response = json.dumps({
+        'results': [{
+            'text': answer if shared.is_chat() else answer[len(prompt):]
+        }]
+    })
 
     # Process the parameters as needed
     return {"result": response}
